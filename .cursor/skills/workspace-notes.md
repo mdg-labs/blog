@@ -8,7 +8,7 @@ Durable project memory for orchestrator and sub-agents. Transient task notes bel
 - **Package:** not scaffolded — start at Phase **0A**
 - **Orchestrator skill:** `.cursor/skills/blog-orchestrator/`
 - **Integration branch:** `main`
-- **GitHub:** issues only (`status/*` labels) — no project board; use `github-intake` to ticket phases
+- **GitHub:** issues only — labels created via `.github/scripts/create-issue-labels.sh`
 
 ## Phase status (mirror of plan checkboxes)
 

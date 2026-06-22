@@ -1,5 +1,5 @@
 ---
-name: github-intake
+name: github-intake-blog
 description: Create or enrich mdg-labs/blog GitHub Issues from a feature description, blog-system-plan phase, or user draft. Single issue for small work; Feature (epic) + child Tasks for multi-phase work. Issues-only workflow — no GitHub project board. Stops at status/ready label. Use when the user asks to ticket Phase 0, plan blog rollout, flesh out a draft issue, or create issues from docs/blog-system-plan.md before orchestration.
 ---
 
@@ -43,7 +43,13 @@ Intake **creates** issues with:
 
 Do **not** add `status/in-progress`, `status/in-review`, or `status/verified` during intake.
 
-Ensure labels exist before first create (MCP or `gh label create` if missing). See [github-issues.md](../blog-orchestrator/github-issues.md).
+**Bootstrap labels** (once per repo) before first issue create:
+
+```bash
+bash .github/scripts/create-issue-labels.sh
+```
+
+MCP does not auto-create labels.
 
 ## Issue summaries (titles)
 

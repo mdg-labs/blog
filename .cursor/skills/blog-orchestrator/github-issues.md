@@ -12,7 +12,11 @@
 
 ## Status labels (workflow)
 
-Create these labels in the repo if missing (intake or first orchestrator run):
+Labels are **not** auto-created by MCP. Bootstrap once:
+
+```bash
+bash .github/scripts/create-issue-labels.sh
+```
 
 | Label | Meaning |
 |---|---|
