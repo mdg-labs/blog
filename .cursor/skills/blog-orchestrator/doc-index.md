@@ -20,7 +20,7 @@ Reference sections as `§N` or phase IDs, e.g. `spec §3.2`, `spec §10 Phase 0B
 | 0D | MDX components + layouts + CSS | `blog/packages/blog/` |
 | 0E | `blog-validate` CLI | `blog/packages/blog/` |
 | 0F | Route templates + Phase 0 gate | `blog/packages/blog/` |
-| 0G | CI + GitHub Packages publish | `blog/` |
+| 0G | CI + npm publish | `blog/` |
 | 1 | Roof pilot | `website/` |
 | 2 | SlugBase marketing | `slugbase/packages/marketing/` |
 | 3 | PipeWatch marketing | `pipewatch/apps/marketing/` |
@@ -73,7 +73,7 @@ Run from repo root with `required_permissions: ["all"]` on first Shell attempt.
 
 ## Package distribution (spec §2)
 
-- **Production:** GitHub Packages (`npm.pkg.github.com`) — not public npmjs
+- **Production:** npmjs (`registry.npmjs.org`) — public `@mdg-labs/blog`
 - **Local dev:** `file:../../../blog/packages/blog` in consumer `package.json`
 - **No** committed tarballs
 
