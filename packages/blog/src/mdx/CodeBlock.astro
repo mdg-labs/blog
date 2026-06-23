@@ -1,0 +1,7 @@
+---
+const { class: className, ...rest } = Astro.props;
+---
+
+<pre class:list={["blog-code-block", className]} {...rest}>
+  <slot />
+</pre>

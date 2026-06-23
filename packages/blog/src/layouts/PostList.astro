@@ -1,0 +1,28 @@
+---
+import PostCard from "./PostCard.astro";
+import type { BlogPostEntry } from "../filters.js";
+import { resolvePostSlug } from "../slug.js";
+
+export interface Props {
+  posts: BlogPostEntry[];
+  basePath?: string;
+}
+
+const { posts, basePath = "/blog" } = Astro.props;
+
+function postHref(entry: BlogPostEntry): string {
+  const slug = resolvePostSlug(entry);
+  const normalizedBase = basePath.replace(/\/$/, "");
+  return `${normalizedBase}/${slug}/`;
+}
+---
+
+<ul class="blog-post-list">
+  {
+    posts.map((entry) => (
+      <li class="blog-post-list-item">
+        <PostCard post={entry.data} href={postHref(entry)} />
+      </li>
+    ))
+  }
+</ul>

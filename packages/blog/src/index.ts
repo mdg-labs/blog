@@ -20,3 +20,4 @@ export {
   type BuildRssFeedOptions,
 } from "./rss.js";
 export { resolvePostSlug, slugify, type PostSlugEntry } from "./slug.js";
+export { blogMdxComponents } from "./mdx/components.js";

@@ -1,0 +1,45 @@
+---
+import "../../styles/blog-prose.css";
+import { formatPostDate } from "../dates.js";
+import type { BlogPostFrontmatter } from "../schema.js";
+
+export interface Props {
+  post: BlogPostFrontmatter;
+  headings?: { depth: number; slug: string; text: string }[];
+}
+
+const { post } = Astro.props;
+const pubDateIso = post.pubDate.toISOString();
+---
+
+<article class="blog-post">
+  <header class="blog-post-header">
+    <h1 class="blog-post-title">{post.title}</h1>
+  {
+    post.description ? (
+      <p class="blog-post-description">{post.description}</p>
+    ) : null
+  }
+    <p class="blog-post-meta">
+      <time class="blog-post-date" datetime={pubDateIso}>
+        {formatPostDate(post.pubDate, post.locale)}
+      </time>
+    </p>
+    <div class="blog-post-tags">
+      {
+        post.tags && post.tags.length > 0 ? (
+          <ul class="blog-post-tag-list">
+            {post.tags.map((tag) => (
+              <li class="blog-post-tag">{tag}</li>
+            ))}
+          </ul>
+        ) : null
+      }
+      <slot name="tags" />
+    </div>
+  </header>
+
+  <div class="blog-prose">
+    <slot />
+  </div>
+</article>

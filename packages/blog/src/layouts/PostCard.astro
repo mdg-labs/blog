@@ -1,0 +1,26 @@
+---
+import { formatPostDate } from "../dates.js";
+import type { BlogPostFrontmatter } from "../schema.js";
+
+export interface Props {
+  post: BlogPostFrontmatter;
+  href: string;
+}
+
+const { post, href } = Astro.props;
+const pubDateIso = post.pubDate.toISOString();
+---
+
+<article class="blog-post-card">
+  <h2 class="blog-post-card-title">
+    <a class="blog-post-card-link" href={href}>
+      {post.title}
+    </a>
+  </h2>
+  <p class="blog-post-card-description">{post.description}</p>
+  <p class="blog-post-card-meta">
+    <time class="blog-post-card-date" datetime={pubDateIso}>
+      {formatPostDate(post.pubDate, post.locale)}
+    </time>
+  </p>
+</article>

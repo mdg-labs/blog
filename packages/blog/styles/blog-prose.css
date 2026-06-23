@@ -1,0 +1,132 @@
+.blog-prose {
+  line-height: 1.7;
+  max-width: 65ch;
+}
+
+.blog-prose :where(h1, h2, h3, h4, h5, h6) {
+  font-weight: 600;
+  line-height: 1.3;
+  margin-block: 1.5em 0.5em;
+}
+
+.blog-prose :where(h1) {
+  font-size: 2rem;
+}
+
+.blog-prose :where(h2) {
+  font-size: 1.5rem;
+}
+
+.blog-prose :where(h3) {
+  font-size: 1.25rem;
+}
+
+.blog-prose :where(p, ul, ol, blockquote, pre) {
+  margin-block: 1em;
+}
+
+.blog-prose :where(a) {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.blog-prose :where(a:hover) {
+  text-decoration-thickness: 2px;
+}
+
+.blog-callout {
+  border-inline-start: 4px solid currentColor;
+  margin-block: 1.25em;
+  padding: 0.75em 1em;
+}
+
+.blog-callout--info {
+  background: color-mix(in srgb, currentColor 8%, transparent);
+}
+
+.blog-callout--warn {
+  background: color-mix(in srgb, currentColor 12%, transparent);
+}
+
+.blog-code-block {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+  line-height: 1.5;
+  overflow-x: auto;
+  padding: 1em;
+}
+
+.blog-post-header {
+  margin-block-end: 2rem;
+}
+
+.blog-post-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 0.5rem;
+}
+
+.blog-post-description {
+  margin: 0 0 1rem;
+}
+
+.blog-post-meta {
+  margin: 0;
+}
+
+.blog-post-date {
+  font-size: 0.95rem;
+}
+
+.blog-post-tags {
+  margin-block-start: 1rem;
+}
+
+.blog-post-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.blog-post-tag {
+  font-size: 0.85rem;
+}
+
+.blog-post-list {
+  display: grid;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.blog-post-card-title {
+  font-size: 1.25rem;
+  margin: 0 0 0.5rem;
+}
+
+.blog-post-card-description {
+  margin: 0 0 0.75rem;
+}
+
+.blog-post-card-meta {
+  margin: 0;
+}
+
+.blog-post-card-date {
+  font-size: 0.9rem;
+}
+
+.blog-post-card-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.blog-post-card-link:hover {
+  text-decoration: underline;
+}

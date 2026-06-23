@@ -1,0 +1,11 @@
+---
+export interface Props {
+  type?: "info" | "warn";
+}
+
+const { type = "info" } = Astro.props;
+---
+
+<aside class:list={["blog-callout", `blog-callout--${type}`]} data-callout-type={type}>
+  <slot />
+</aside>
