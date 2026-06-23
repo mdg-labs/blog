@@ -369,7 +369,7 @@ Phases **0A–0G** are entirely in the **`blog/` repo**. Phases **1–3** are co
 |---|---|
 | 0G.1 | `.github/workflows/ci.yml` — on PR/push: `pnpm install`, `pnpm test`, `pnpm typecheck` |
 | 0G.2 | Add `publishConfig` to `packages/blog/package.json`: `"access": "public"` |
-| 0G.3 | `.github/workflows/publish.yml` — tag + `pnpm publish` to npm on push to `main` (`NPM_TOKEN` secret) |
+| 0G.3 | `.github/workflows/publish.yml` — tag + `npm publish` via trusted publishing (OIDC) on push to `main` |
 | 0G.4 | Document install instructions in root `README.md` |
 
 **Acceptance criteria**
@@ -461,7 +461,7 @@ astro build
 | Topic | Decision |
 |---|---|
 | Package / repo | `@mdg-labs/blog` in `mdg-labs/blog` |
-| Registry | Public npmjs (`@mdg-labs/blog`) — publish via `NPM_TOKEN` in GHA |
+| Registry | Public npmjs (`@mdg-labs/blog`) — publish via trusted publishing (GitHub Actions OIDC) |
 | Local `file:` | Dev workspace only |
 | Framework | Astro marketing only |
 | Content API | Content Collections + `glob` loader |
@@ -484,7 +484,7 @@ astro build
 
 - [Astro Content Collections](https://docs.astro.build/en/guides/content-collections/)
 - [@astrojs/mdx](https://docs.astro.build/en/guides/integrations-guide/mdx/)
-- [npm publish scoped packages](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages)
+- [npm trusted publishing](https://docs.npmjs.com/trusted-publishers/)
 
 ### Revision history
 

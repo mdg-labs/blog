@@ -1,9 +1,9 @@
 name: Publish
 
-# On push to main: if root package.json version has no matching git tag yet,
-# create v<version>, then publish @mdg-labs/blog to the npm registry.
-# Bump "version" in package.json (root + packages/blog) before merging to main.
-# Requires NPM_TOKEN repository secret (npm Automation token with publish access).
+# On push to main: if packages/blog/package.json version has no matching git tag yet,
+# create v<version>, then publish @mdg-labs/blog to npm via trusted publishing (OIDC).
+# Bump "version" in packages/blog/package.json before merging to main.
+# npmjs.com: package → Settings → Trusted publishing → GitHub Actions → publish.yml
 
 on:
   push:
@@ -11,6 +11,7 @@ on:
 
 permissions:
   contents: write
+  id-token: write
 
 concurrency:
   group: publish-${{ github.workflow }}-${{ github.ref }}
@@ -34,7 +35,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
         with:
-          node-version: 22
+          node-version: 22.14
           registry-url: https://registry.npmjs.org
           scope: "@mdg-labs"
           cache: pnpm
@@ -51,12 +52,7 @@ jobs:
       - name: Resolve release version
         id: version
         run: |
-          VERSION=$(node -p "require('./package.json').version")
-          PKG_VERSION=$(node -p "require('./packages/blog/package.json').version")
-          if [ "$VERSION" != "$PKG_VERSION" ]; then
-            echo "Version mismatch: root=$VERSION packages/blog=$PKG_VERSION" >&2
-            exit 1
-          fi
+          VERSION=$(node -p "require('./packages/blog/package.json').version")
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
 
@@ -82,9 +78,11 @@ jobs:
           git tag -a "${{ steps.version.outputs.tag }}" -m "Release ${{ steps.version.outputs.tag }}"
           git push origin "${{ steps.version.outputs.tag }}"
 
+      - name: Upgrade npm for trusted publishing
+        if: steps.tag.outputs.exists == 'false'
+        run: npm install -g npm@latest
+
       - name: Publish @mdg-labs/blog
         if: steps.tag.outputs.exists == 'false'
         working-directory: packages/blog
-        run: pnpm publish --no-git-checks --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public

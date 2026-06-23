@@ -26,22 +26,22 @@ Adjust the relative path for your consumer repo depth. Switch to a semver pin (`
 
 ## Publishing
 
-Releases are automated on push to `main`. Bump `version` in **both** [`package.json`](package.json) (workspace root) and [`packages/blog/package.json`](packages/blog/package.json) in the same commit before merging.
+Releases are automated on push to `main`. Bump `version` in [`packages/blog/package.json`](packages/blog/package.json) before merging.
 
 When CI merges to `main`, [`.github/workflows/publish.yml`](.github/workflows/publish.yml):
 
 1. Runs tests and typecheck
-2. Verifies root and package versions match
+2. Reads the release version from `packages/blog/package.json`
 3. If git tag `v<version>` does not exist yet → creates the tag and publishes `@mdg-labs/blog` to npm
 4. If the tag already exists → skips (no duplicate publish)
 
-The workflow requires an `NPM_TOKEN` repository secret (npm **Automation** token with publish access to `@mdg-labs/blog`).
+Publishing uses [npm trusted publishing](https://docs.npmjs.com/trusted-publishers/) (OIDC from GitHub Actions). No `NPM_TOKEN` or other publish secret is required — configure the trusted publisher on npmjs.com (package → Settings → Trusted publishing → workflow `publish.yml`).
 
 **Manual publish** (emergency only):
 
 ```bash
 cd packages/blog
-pnpm publish --no-git-checks --access public
+npm publish --access public
 ```
 
-Requires `NODE_AUTH_TOKEN` (or `npm login`) with publish access to the `@mdg-labs` scope on npm.
+Requires `npm login` with publish access to the `@mdg-labs` scope on npm.
