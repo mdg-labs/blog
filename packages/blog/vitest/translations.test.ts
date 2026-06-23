@@ -26,7 +26,24 @@ function makePost(
 }
 
 describe("resolveTranslationKey", () => {
-  it("strips locale prefix from entry id", () => {
+  it("strips locale prefix from Astro filePath", () => {
+    expect(
+      resolveTranslationKey({
+        id: "willkommen",
+        filePath: "src/content/blog/de/welcome/index.mdx",
+        data: { locale: "de" },
+      }),
+    ).toBe("welcome");
+    expect(
+      resolveTranslationKey({
+        id: "welcome",
+        filePath: "src/content/blog/en/welcome/index.mdx",
+        data: { locale: "en" },
+      }),
+    ).toBe("welcome");
+  });
+
+  it("strips locale prefix from entry id path", () => {
     expect(
       resolveTranslationKey({
         id: "en/welcome/index.mdx",

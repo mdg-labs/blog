@@ -6,14 +6,25 @@ const DEFAULT_LOCALES: readonly BlogLocale[] = ["en", "de"];
 
 export type TranslationEntry = PostSlugEntry & {
   data: { locale: BlogLocale };
+  /** Astro glob loader: locale folder path (e.g. `src/content/blog/de/welcome/index.mdx`). */
+  filePath?: string;
 };
 
-/** Strip locale prefix from entry id → shared folder key (e.g. `en/welcome/index.mdx` → `welcome`). */
+function translationSourcePath(entry: TranslationEntry): string {
+  if (entry.filePath) {
+    return entry.filePath
+      .replace(/^src\/content\/blog\//, "")
+      .replace(/^content\/blog\//, "");
+  }
+  return entry.id;
+}
+
+/** Strip locale prefix from entry path → shared folder key (e.g. `de/welcome/index.mdx` → `welcome`). */
 export function resolveTranslationKey(
   entry: TranslationEntry,
   locales: readonly BlogLocale[] = DEFAULT_LOCALES,
 ): string {
-  const withoutFile = entry.id
+  const withoutFile = translationSourcePath(entry)
     .replace(/\/index\.(md|mdx)$/i, "")
     .replace(/\.(md|mdx)$/i, "");
   const segments = withoutFile.split("/");
