@@ -258,9 +258,9 @@ Phases **0A–0G** are entirely in the **`blog/` repo**. Phases **1–3** are co
 
 **Acceptance criteria**
 
-- [ ] `pnpm install` succeeds from `blog/` root
-- [ ] `packages/blog` resolves as workspace package `@mdg-labs/blog`
-- [ ] `pnpm -r typecheck` runs (may be empty/no-op until 0B)
+- [x] `pnpm install` succeeds from `blog/` root
+- [x] `packages/blog` resolves as workspace package `@mdg-labs/blog`
+- [x] `pnpm -r typecheck` runs (may be empty/no-op until 0B)
 
 ---
 
@@ -277,9 +277,9 @@ Phases **0A–0G** are entirely in the **`blog/` repo**. Phases **1–3** are co
 
 **Acceptance criteria**
 
-- [ ] `blogPostSchema.safeParse` rejects missing `title`, bad `slug`, invalid `locale`
-- [ ] `defineBlogCollection` returns an object with `loader` + `schema` keys (unit test or snapshot)
-- [ ] `pnpm test` passes
+- [x] `blogPostSchema.safeParse` rejects missing `title`, bad `slug`, invalid `locale`
+- [x] `defineBlogCollection` returns an object with `loader` + `schema` keys (unit test or snapshot)
+- [x] `pnpm test` passes
 
 ---
 
@@ -296,12 +296,12 @@ Phases **0A–0G** are entirely in the **`blog/` repo**. Phases **1–3** are co
 
 **Acceptance criteria**
 
-- [ ] `sortPostsByDate` orders newest `pubDate` first
-- [ ] `filterPublished` excludes `draft: true`
-- [ ] `filterByLocale` keeps only matching `data.locale`
-- [ ] `buildRssFeed` output contains `<rss`, item `<title>`, `<link>`, parseable XML
-- [ ] `buildBlogPostingJsonLd` returns `@type: BlogPosting` with `headline`, `datePublished`
-- [ ] `pnpm test` passes
+- [x] `sortPostsByDate` orders newest `pubDate` first
+- [x] `filterPublished` excludes `draft: true`
+- [x] `filterByLocale` keeps only matching `data.locale`
+- [x] `buildRssFeed` output contains `<rss`, item `<title>`, `<link>`, parseable XML
+- [x] `buildBlogPostingJsonLd` returns `@type: BlogPosting` with `headline`, `datePublished`
+- [x] `pnpm test` passes
 
 ---
 
@@ -318,10 +318,10 @@ Phases **0A–0G** are entirely in the **`blog/` repo**. Phases **1–3** are co
 
 **Acceptance criteria**
 
-- [ ] All layouts export valid Astro components (no TS errors)
-- [ ] `blogMdxComponents` includes `Callout` and `CodeBlock`
-- [ ] CSS file importable via `@mdg-labs/blog/styles/blog-prose.css`
-- [ ] `pnpm typecheck` passes
+- [x] All layouts export valid Astro components (no TS errors)
+- [x] `blogMdxComponents` includes `Callout` and `CodeBlock`
+- [x] CSS file importable via `@mdg-labs/blog/styles/blog-prose.css`
+- [x] `pnpm typecheck` passes
 
 ---
 
@@ -337,10 +337,10 @@ Phases **0A–0G** are entirely in the **`blog/` repo**. Phases **1–3** are co
 
 **Acceptance criteria**
 
-- [ ] `blog-validate vitest/fixtures/valid` exits 0
-- [ ] `blog-validate vitest/fixtures/invalid` exits non-zero with readable error on stderr
-- [ ] Duplicate slug fixture fails validation
-- [ ] `pnpm test` passes
+- [x] `blog-validate vitest/fixtures/valid` exits 0
+- [x] `blog-validate vitest/fixtures/invalid` exits non-zero with readable error on stderr
+- [x] Duplicate slug fixture fails validation
+- [x] `pnpm test` passes
 
 ---
 
@@ -357,9 +357,9 @@ Phases **0A–0G** are entirely in the **`blog/` repo**. Phases **1–3** are co
 
 **Acceptance criteria**
 
-- [ ] Templates are valid `.astro` / `.ts` (syntax check; no missing imports from `@mdg-labs/blog`)
-- [ ] README in `templates/README.md` explains copy steps per consumer
-- [ ] **Phase 0 gate:** `pnpm test && pnpm typecheck` green at repo root
+- [x] Templates are valid `.astro` / `.ts` (syntax check; no missing imports from `@mdg-labs/blog`)
+- [x] README in `templates/README.md` explains copy steps per consumer
+- [x] **Phase 0 gate:** `pnpm test && pnpm typecheck` green at repo root
 
 ---
 
@@ -374,9 +374,9 @@ Phases **0A–0G** are entirely in the **`blog/` repo**. Phases **1–3** are co
 
 **Acceptance criteria**
 
-- [ ] CI green on default branch
-- [ ] `@mdg-labs/blog@0.1.0` installable from GitHub Packages with org `.npmrc`
-- [ ] Version in `package.json` bumped to `0.1.0` on publish tag
+- [x] CI green on default branch
+- [x] `@mdg-labs/blog@0.1.0` installable from GitHub Packages with org `.npmrc`
+- [x] Version in `package.json` bumped to `0.1.0` on publish tag
 
 ---
 
