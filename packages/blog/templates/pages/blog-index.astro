@@ -1,0 +1,23 @@
+---
+/**
+ * Copy to: src/pages/blog/index.astro (website, slugbase)
+ *           src/pages/blog/index.astro (pipewatch — en only; skip de/ templates)
+ *
+ * Wrap PostList in your site BaseLayout and set site-specific title/meta.
+ */
+import { getCollection } from "astro:content";
+import {
+  filterPublished,
+  sortPostsByDate,
+} from "@mdg-labs/blog";
+import PostList from "@mdg-labs/blog/layouts/PostList.astro";
+
+export const prerender = true; // PipeWatch: required on blog routes
+
+const posts = sortPostsByDate(
+  filterPublished(await getCollection("blog")),
+);
+---
+
+<!-- Replace with your marketing BaseLayout -->
+<PostList posts={posts} basePath="/blog" />

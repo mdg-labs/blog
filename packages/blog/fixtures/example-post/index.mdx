@@ -1,0 +1,25 @@
+---
+title: Example post
+description: Sample MDX post for manual smoke testing in a consumer site.
+pubDate: 2024-06-15
+locale: en
+tags:
+  - example
+  - blog
+---
+
+# Example post
+
+Use this fixture to verify the blog pipeline after copying route templates into a consumer.
+
+<Callout type="info">
+  This callout renders via `blogMdxComponents` from `@mdg-labs/blog`.
+</Callout>
+
+## Code sample
+
+```ts
+import { filterPublished } from "@mdg-labs/blog";
+```
+
+Copy this directory to your consumer `contentBase` as `en/example-post/index.mdx` (or `example-post/index.mdx` on PipeWatch).

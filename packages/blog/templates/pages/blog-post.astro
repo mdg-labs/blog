@@ -1,0 +1,32 @@
+---
+/**
+ * Copy to: src/pages/blog/[slug].astro (website, slugbase, pipewatch)
+ *
+ * Canonical render pattern — spec §6 (match PipeWatch privacy.astro MDX flow).
+ * Wrap BlogPostLayout in your site BaseLayout for chrome, nav, and SEO.
+ */
+import { getCollection, render } from "astro:content";
+import {
+  blogMdxComponents,
+  filterPublished,
+  resolvePostSlug,
+} from "@mdg-labs/blog";
+import BlogPostLayout from "@mdg-labs/blog/layouts/BlogPostLayout.astro";
+
+export const prerender = true; // PipeWatch: required on blog routes
+
+export async function getStaticPaths() {
+  const posts = filterPublished(await getCollection("blog"));
+  return posts.map((entry) => ({
+    params: { slug: resolvePostSlug(entry) },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+---
+
+<BlogPostLayout post={entry.data} headings={headings}>
+  <Content components={blogMdxComponents} />
+</BlogPostLayout>

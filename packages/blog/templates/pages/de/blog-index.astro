@@ -1,0 +1,26 @@
+---
+/**
+ * Copy to: src/pages/de/blog/index.astro (website, slugbase — bilingual sites only)
+ *
+ * German blog index: filters collection to locale "de".
+ */
+import { getCollection } from "astro:content";
+import {
+  filterByLocale,
+  filterPublished,
+  sortPostsByDate,
+} from "@mdg-labs/blog";
+import PostList from "@mdg-labs/blog/layouts/PostList.astro";
+
+export const prerender = true;
+
+const posts = sortPostsByDate(
+  filterByLocale(
+    filterPublished(await getCollection("blog")),
+    "de",
+  ),
+);
+---
+
+<!-- Replace with your marketing BaseLayout -->
+<PostList posts={posts} basePath="/de/blog" />
