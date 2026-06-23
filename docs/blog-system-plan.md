@@ -41,18 +41,18 @@ Comments, search UI, CMS, cross-site syndication, customer docs (`docs.*.app`), 
 
 | Channel | Use |
 |---|---|
-| **GitHub Packages** (`npm.pkg.github.com`) | **Production** — versioned installs in CI and deployed builds |
+| **npmjs** (`registry.npmjs.org`) | **Production** — public `@mdg-labs/blog`; versioned installs in CI and deployed builds |
 | **`file:` dependency** | **Local dev only** — multi-root workspace while iterating |
-| **npmjs (public)** | **No** — private org package; not published publicly |
+| **GitHub Packages** | **No** — superseded by npmjs (2026-06) |
 | **Committed tarballs** | **No** |
 
-### Consumer `.npmrc` (CI + machines that install from registry)
+### Consumer install (CI + production)
 
-```ini
-@mdg-labs:registry=https://npm.pkg.github.com
+No `.npmrc` or registry token required — the package is public on npm:
+
+```bash
+npm install @mdg-labs/blog@^0.1.1
 ```
-
-CI: `GITHUB_TOKEN` with `read:packages` (or repo-scoped token).
 
 ### Local dev (workspace)
 
@@ -60,7 +60,7 @@ CI: `GITHUB_TOKEN` with `read:packages` (or repo-scoped token).
 "@mdg-labs/blog": "file:../../../blog/packages/blog"
 ```
 
-Adjust relative path per consumer repo depth. Replace with semver (`^0.1.0`) after Phase 0G publish.
+Adjust relative path per consumer repo depth. Replace with semver (`^0.1.1`) after Phase 0G publish.
 
 ---
 
@@ -71,7 +71,7 @@ Adjust relative path per consumer repo depth. Replace with semver (`^0.1.0`) aft
 | MDG Labs roof | `website/` | 5.x static | CF Workers | `en`, `de` | `./src/content/blog` |
 | SlugBase marketing | `slugbase/packages/marketing/` | 6.x static | CF Workers | `en`, `de` | `./src/content/blog` |
 | PipeWatch marketing | `pipewatch/apps/marketing/` | 6.x server+prerender | CF Workers | `en` | `./content/blog` |
-| Blog package | `blog/packages/blog/` | library | GitHub Packages | — | — |
+| Blog package | `blog/packages/blog/` | library | npmjs | — | — |
 
 **Workspace:** `website/mdg-labs.code-workspace` includes `../blog`.
 
@@ -363,20 +363,20 @@ Phases **0A–0G** are entirely in the **`blog/` repo**. Phases **1–3** are co
 
 ---
 
-### Phase 0G — CI & GitHub Packages publish
+### Phase 0G — CI & npm publish
 
 | # | Task |
 |---|---|
 | 0G.1 | `.github/workflows/ci.yml` — on PR/push: `pnpm install`, `pnpm test`, `pnpm typecheck` |
-| 0G.2 | Add `publishConfig` to `packages/blog/package.json`: `"registry": "https://npm.pkg.github.com"` |
-| 0G.3 | Workflow or manual `pnpm publish` on tag `v0.1.0` (operator) |
+| 0G.2 | Add `publishConfig` to `packages/blog/package.json`: `"access": "public"` |
+| 0G.3 | `.github/workflows/publish.yml` — tag + `npm publish` via trusted publishing (OIDC) on push to `main` |
 | 0G.4 | Document install instructions in root `README.md` |
 
 **Acceptance criteria**
 
 - [x] CI green on default branch
-- [x] `@mdg-labs/blog@0.1.0` installable from GitHub Packages with org `.npmrc`
-- [x] Version in `package.json` bumped to `0.1.0` on publish tag
+- [x] `@mdg-labs/blog` installable from npm (migrated from GitHub Packages @0.1.0 → npmjs @0.1.1)
+- [x] Version in `package.json` bumped on publish tag
 
 ---
 
@@ -396,11 +396,11 @@ Phases **0A–0G** are entirely in the **`blog/` repo**. Phases **1–3** are co
 
 **Acceptance criteria**
 
-- [ ] `npm run build` passes
-- [ ] `/blog/<slug>/`, `/de/blog/<slug>/` render MDX + `Callout`
-- [ ] `/blog/rss.xml` valid
-- [ ] Draft excluded from index and RSS
-- [ ] Sitemap includes blog URLs
+- [x] `npm run build` passes
+- [x] `/blog/<slug>/`, `/de/blog/<slug>/` render MDX + `Callout`
+- [x] `/blog/rss.xml` valid
+- [x] Draft excluded from index and RSS
+- [x] Sitemap includes blog URLs
 
 ---
 
@@ -461,7 +461,7 @@ astro build
 | Topic | Decision |
 |---|---|
 | Package / repo | `@mdg-labs/blog` in `mdg-labs/blog` |
-| Registry | GitHub Packages only — not public npmjs |
+| Registry | Public npmjs (`@mdg-labs/blog`) — publish via trusted publishing (GitHub Actions OIDC) |
 | Local `file:` | Dev workspace only |
 | Framework | Astro marketing only |
 | Content API | Content Collections + `glob` loader |
@@ -484,7 +484,7 @@ astro build
 
 - [Astro Content Collections](https://docs.astro.build/en/guides/content-collections/)
 - [@astrojs/mdx](https://docs.astro.build/en/guides/integrations-guide/mdx/)
-- [GitHub Packages npm](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry)
+- [npm trusted publishing](https://docs.npmjs.com/trusted-publishers/)
 
 ### Revision history
 
@@ -492,4 +492,4 @@ astro build
 |---|---|
 | v1–v3 | See git history in `website` repo |
 | v4 | Implementation checklists; lived in `website/docs/` |
-| **v5** | Canonical doc in `blog/docs/`; Phase 0A–0G with acceptance criteria; GitHub Packages distribution |
+| **v5** | Canonical doc in `blog/docs/`; Phase 0A–0G with acceptance criteria; npmjs distribution |
