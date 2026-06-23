@@ -36,11 +36,16 @@ Adjust the relative path for your consumer repo depth. Switch to a semver pin (`
 
 ## Publishing
 
-Publishing is **operator-only** — agents do not push packages.
+Releases are automated on push to `main`. Bump `version` in **both** [`package.json`](package.json) (workspace root) and [`packages/blog/package.json`](packages/blog/package.json) in the same commit before merging.
 
-**Automated (recommended):** push a version tag matching `packages/blog/package.json` (e.g. `v0.1.0`). The [`.github/workflows/publish.yml`](.github/workflows/publish.yml) workflow publishes `@mdg-labs/blog` to GitHub Packages using `GITHUB_TOKEN`.
+When CI merges to `main`, [`.github/workflows/publish.yml`](.github/workflows/publish.yml):
 
-**Manual:**
+1. Runs tests and typecheck
+2. Verifies root and package versions match
+3. If git tag `v<version>` does not exist yet → creates the tag and publishes `@mdg-labs/blog` to GitHub Packages
+4. If the tag already exists → skips (no duplicate publish)
+
+**Manual publish** (emergency only):
 
 ```bash
 cd packages/blog
