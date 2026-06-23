@@ -1,0 +1,29 @@
+{
+  "name": "@mdg-labs/blog",
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./schema": "./src/schema.ts",
+    "./mdx": "./src/mdx/components.ts",
+    "./layouts/BlogPostLayout.astro": "./src/layouts/BlogPostLayout.astro",
+    "./layouts/PostList.astro": "./src/layouts/PostList.astro",
+    "./layouts/PostCard.astro": "./src/layouts/PostCard.astro",
+    "./styles/blog-prose.css": "./styles/blog-prose.css"
+  },
+  "bin": {
+    "blog-validate": "./bin/blog-validate.mjs"
+  },
+  "peerDependencies": {
+    "astro": "^5.0.0 || ^6.0.0",
+    "@astrojs/mdx": "^4.0.0 || ^5.0.0",
+    "zod": "^3.25.0"
+  },
+  "scripts": {
+    "test": "echo \"no tests yet\"",
+    "typecheck": "node -e \"process.exit(0)\""
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
