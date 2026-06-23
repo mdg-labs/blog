@@ -5,7 +5,7 @@ Shared Astro blog infrastructure for MDG Labs **marketing** sites — content sc
 | | |
 |---|---|
 | **npm** | [`@mdg-labs/blog`](https://www.npmjs.com/package/@mdg-labs/blog) (public, no token required) |
-| **Latest** | `0.1.3` |
+| **Latest** | `0.1.5` |
 | **Repo** | [`mdg-labs/blog`](https://github.com/mdg-labs/blog) |
 | **Spec** | [`docs/blog-system-plan.md`](docs/blog-system-plan.md) |
 
@@ -47,9 +47,9 @@ Copy-paste route templates live in [`packages/blog/templates/`](packages/blog/te
 ### npm / pnpm (CI and production)
 
 ```bash
-npm install @mdg-labs/blog@^0.1.3 @astrojs/mdx
+npm install @mdg-labs/blog@^0.1.5 @astrojs/mdx
 # or
-pnpm add @mdg-labs/blog@^0.1.3 @astrojs/mdx
+pnpm add @mdg-labs/blog@^0.1.5 @astrojs/mdx
 ```
 
 No `.npmrc` or registry token is required — the package is public on npmjs.
@@ -59,7 +59,7 @@ Pin `astro` and `@astrojs/mdx` to compatible versions in the same change. Exampl
 ```json
 {
   "dependencies": {
-    "@mdg-labs/blog": "^0.1.3",
+    "@mdg-labs/blog": "^0.1.5",
     "@astrojs/mdx": "^7.0.0",
     "astro": "^7.0.0"
   },
@@ -77,7 +77,7 @@ While iterating across repos in a multi-root workspace, use a `file:` dependency
 "@mdg-labs/blog": "file:../../../blog/packages/blog"
 ```
 
-Adjust the relative path for your consumer repo depth. Switch to a semver pin (`^0.1.3`) before merging to a branch that deploys from npm.
+Adjust the relative path for your consumer repo depth. Switch to a semver pin (`^0.1.5`) before merging to a branch that deploys from npm.
 
 ---
 
@@ -292,8 +292,23 @@ Requires `npm login` with publish access to the `@mdg-labs` scope.
 
 | Site | Repo | Status |
 |---|---|---|
-| MDG Labs roof | `website/` | Live — Astro 7, `@mdg-labs/blog@^0.1.3` |
+| MDG Labs roof | `website/` | Live — Astro 7, `@mdg-labs/blog@^0.1.5` |
 | SlugBase marketing | `slugbase/packages/marketing/` | Planned |
 | PipeWatch marketing | `pipewatch/apps/marketing/` | Planned |
 
 For architecture, phases, and acceptance criteria, see [`docs/blog-system-plan.md`](docs/blog-system-plan.md).
+
+---
+
+## Cursor artifacts for consumer repos
+
+Copyable agent guidance lives in [`dist/`](dist/README.md) — a **skill** (full integration manual) and **rule** (publish-first guardrails) for Astro marketing sites that consume this package.
+
+```bash
+# From a consumer repo root
+mkdir -p .cursor/skills/mdg-labs-blog-consumer .cursor/rules
+cp -r ../blog/dist/cursor/skill/mdg-labs-blog-consumer/* .cursor/skills/mdg-labs-blog-consumer/
+cp ../blog/dist/cursor/rule/mdg-labs-blog-consumer.mdc .cursor/rules/
+```
+
+Agents working in **`mdg-labs/blog`** must keep `dist/` in sync when the public API, templates, or integration docs change — see [`.cursor/rules/20-sync-consumer-cursor-artifacts.mdc`](.cursor/rules/20-sync-consumer-cursor-artifacts.mdc).

@@ -76,6 +76,7 @@ Run from repo root with `required_permissions: ["all"]` on first Shell attempt.
 - **Production:** npmjs (`registry.npmjs.org`) — public `@mdg-labs/blog`
 - **Local dev:** `file:../../../blog/packages/blog` in consumer `package.json`
 - **No** committed tarballs
+- **Consumer Cursor artifacts:** `dist/cursor/` — copy skill + rule into marketing repos; sync via rule `20-sync-consumer-cursor-artifacts.mdc`
 
 ## GitHub tracking (issues only)
 

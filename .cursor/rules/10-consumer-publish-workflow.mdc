@@ -5,19 +5,22 @@ alwaysApply: true
 
 # Consumer integration — publish first, never `file:`
 
-`@mdg-labs/blog` is distributed via **GitHub Packages** (`npm.pkg.github.com`). Consumer sites (`website`, SlugBase marketing, PipeWatch marketing) must **not** point at a local path during normal task work.
+`@mdg-labs/blog` is distributed via **public npm** (`registry.npmjs.org`). Consumer sites (`website`, SlugBase marketing, PipeWatch marketing) must **not** point at a local path during normal task work.
+
+Copyable Cursor **skill** + **rule** for consumers live in [`dist/`](../dist/README.md). Keep them in sync — rule [`20-sync-consumer-cursor-artifacts.mdc`](20-sync-consumer-cursor-artifacts.mdc).
 
 ## Correct workflow
 
-1. **Implement** in `blog/packages/blog` on `blog` repo `staging`.
+1. **Implement** in `blog/packages/blog` on the `blog` repo.
 2. **Bump version** in `packages/blog/package.json` (semver patch/minor as appropriate).
 3. **Run** `pnpm test` + `pnpm typecheck` in `packages/blog`.
-4. **Publish** — merge to `blog` `main` so `.github/workflows/publish.yml` publishes the new version to GitHub Packages (or operator publishes manually if that is the agreed process).
-5. **Only then** update the consumer `package.json` / lockfile:
+4. **Update** `dist/cursor/` consumer artifacts if API, templates, or integration docs changed (same commit).
+5. **Publish** — merge to `blog` `main` so `.github/workflows/publish.yml` publishes the new version to npm.
+6. **Only then** update the consumer `package.json` / lockfile:
    ```json
-   "@mdg-labs/blog": "^0.1.4"
+   "@mdg-labs/blog": "^0.1.5"
    ```
-6. Run `npm install` / `pnpm install` in the consumer and verify build.
+7. Run `npm install` / `pnpm install` in the consumer and verify build.
 
 ## Forbidden
 

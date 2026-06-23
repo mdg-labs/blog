@@ -1,0 +1,74 @@
+---
+description: Keep dist/cursor consumer skill and rule in sync when package API, templates, or integration docs change
+alwaysApply: true
+---
+
+# Sync consumer Cursor artifacts (`dist/`)
+
+The **`dist/`** folder holds copyable Cursor **skill** and **rule** files for `@mdg-labs/blog` consumer sites. Agents copy them into marketing repos (`website`, `slugbase/packages/marketing`, `pipewatch/apps/marketing`).
+
+| Artifact | Path |
+|---|---|
+| Consumer skill | `dist/cursor/skill/mdg-labs-blog-consumer/SKILL.md` |
+| Consumer rule | `dist/cursor/rule/mdg-labs-blog-consumer.mdc` |
+| Copy instructions | `dist/README.md` |
+
+## When to update `dist/` (same commit)
+
+Update the matching `dist/` files whenever a change affects **consumer setup, usage, or agent guardrails**:
+
+| Trigger | Sync into `dist/` |
+|---|---|
+| `packages/blog/package.json` — `version`, `exports`, `bin`, peer deps | Semver pins, public API table, CI bin path |
+| `packages/blog/src/index.ts` or new public exports | Public API table in skill |
+| `packages/blog/templates/**` or `templates/README.md` | Route template table, per-site checklists, paths |
+| `packages/blog/bin/**` | CI validate command examples |
+| `packages/blog/fixtures/**` | Post layout / frontmatter examples |
+| `README.md` — install, integration, content layout, publishing | Install section, workflow, content rules |
+| `docs/blog-system-plan.md` — consumer-facing acceptance or API | Skill sections cited by plan |
+
+**Do not** wait for a separate docs task — `dist/` is part of the package surface for downstream agents.
+
+## What to keep aligned
+
+1. **Current package version** in install examples (`^0.1.x` in skill + rule).
+2. **Registry** — public **npm** (`registry.npmjs.org`), not GitHub Packages.
+3. **Publish workflow** — bump `packages/blog/package.json` version → merge `main` → `publish.yml` tags and publishes.
+4. **Consumer path table** — `contentBase`, config paths, locales per site.
+5. **CI snippets** — `blog-validate` invocation and `contentBase` path variants.
+6. **Forbidden patterns** — no `file:` in agent commits; publish-first blocked state.
+7. **`dist/README.md`** — copy commands still valid if paths change.
+
+## How to update
+
+1. Edit the **source of truth** (usually `README.md` + templates README + package exports).
+2. Mirror changes into `dist/cursor/skill/mdg-labs-blog-consumer/SKILL.md` and `dist/cursor/rule/mdg-labs-blog-consumer.mdc`.
+3. Keep the rule **short** (guardrails + pointers); keep the skill **complete** (step-by-step integration).
+4. Stage `dist/` explicitly in the commit alongside package/doc changes.
+
+## Verification (before commit)
+
+```bash
+# Version in dist examples matches package.json
+rg -n '"@mdg-labs/blog": "\^' dist/ packages/blog/package.json README.md
+
+# Public exports in skill match package exports
+rg -n '^\s+"\.' packages/blog/package.json
+rg -n '@mdg-labs/blog' dist/cursor/skill/mdg-labs-blog-consumer/SKILL.md
+
+# Consumer paths documented in both skill and templates README
+rg -n 'contentBase' dist/cursor/skill/mdg-labs-blog-consumer/SKILL.md packages/blog/templates/README.md
+```
+
+## Anti-patterns
+
+```bash
+# ❌ Change exports or integration steps without updating dist/
+# ❌ Let dist/ reference GitHub Packages or staging-only publish flow
+# ❌ Duplicate conflicting instructions between README and dist/ skill
+# ✅ One commit: package change + README + dist/ cursor artifacts
+```
+
+## Consumer repos
+
+After merging blog changes, operators re-copy `dist/` into consumer `.cursor/` or bump semver only — remind in PR description when `dist/` or public API changed.
