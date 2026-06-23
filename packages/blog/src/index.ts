@@ -20,4 +20,10 @@ export {
   type BuildRssFeedOptions,
 } from "./rss.js";
 export { resolvePostSlug, slugify, type PostSlugEntry } from "./slug.js";
+export {
+  validateBlogContent,
+  type ValidateBlogContentOptions,
+  type ValidateBlogContentResult,
+  type ValidationProblem,
+} from "./validate.js";
 export { blogMdxComponents } from "./mdx/components.js";
