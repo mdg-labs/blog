@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 
 import { spawnSync } from "node:child_process";
+import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const binDir = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.join(binDir, "..");
-const tsxCli = path.join(packageRoot, "node_modules/tsx/dist/cli.mjs");
+const require = createRequire(path.join(packageRoot, "package.json"));
+const tsxCli = path.join(path.dirname(require.resolve("tsx/package.json")), "dist/cli.mjs");
 const cliScript = path.join(binDir, "blog-validate.ts");
 const contentBase = process.argv[2];
 
