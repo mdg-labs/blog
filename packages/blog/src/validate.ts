@@ -3,13 +3,17 @@ import path from "node:path";
 
 import yaml from "js-yaml";
 
+import type { BlogLocale } from "./collection.js";
 import { blogPostSchema } from "./schema.js";
 import { resolvePostSlug } from "./slug.js";
+import { resolveTranslationKey } from "./translations.js";
 
 const MARKDOWN_EXTENSIONS = new Set([".md", ".mdx"]);
 
 export type ValidateBlogContentOptions = {
   warnMissingHeroImage?: boolean;
+  /** When set, warn on non-draft posts missing a sibling locale for the same translation key. */
+  expectedLocales?: readonly BlogLocale[];
 };
 
 export type ValidationProblem = {
@@ -61,10 +65,14 @@ export function validateBlogContent(
   contentBase: string,
   options: ValidateBlogContentOptions = {},
 ): ValidateBlogContentResult {
-  const { warnMissingHeroImage = true } = options;
+  const { warnMissingHeroImage = true, expectedLocales } = options;
   const errors: ValidationProblem[] = [];
   const warnings: ValidationProblem[] = [];
   const slugByLocale = new Map<string, Map<string, string[]>>();
+  const translationGroups = new Map<
+    string,
+    Map<BlogLocale, { file: string; draft: boolean }[]>
+  >();
 
   const absoluteBase = path.resolve(contentBase);
 
@@ -125,6 +133,19 @@ export function validateBlogContent(
     localeSlugs.set(slug, slugFiles);
     slugByLocale.set(data.locale, localeSlugs);
 
+    const localesForKeys = expectedLocales ?? (["en", "de"] as const);
+    const translationKey = resolveTranslationKey(
+      { id: relFile, data },
+      localesForKeys,
+    );
+    const group =
+      translationGroups.get(translationKey) ??
+      new Map<BlogLocale, { file: string; draft: boolean }[]>();
+    const localeFiles = group.get(data.locale) ?? [];
+    localeFiles.push({ file: relFile, draft: data.draft });
+    group.set(data.locale, localeFiles);
+    translationGroups.set(translationKey, group);
+
     if (warnMissingHeroImage && data.heroImage) {
       const heroPath = path.resolve(path.dirname(filePath), data.heroImage);
       if (!fs.existsSync(heroPath)) {
@@ -143,6 +164,42 @@ export function validateBlogContent(
           file: fileList.join(", "),
           message: `Duplicate slug "${slug}" for locale "${locale}"`,
         });
+      }
+    }
+  }
+
+  for (const [translationKey, byLocale] of translationGroups) {
+    for (const [locale, fileList] of byLocale) {
+      if (fileList.length > 1) {
+        errors.push({
+          file: fileList.map((item) => item.file).join(", "),
+          message: `Duplicate translation key "${translationKey}" for locale "${locale}"`,
+        });
+      }
+    }
+
+    if (expectedLocales && expectedLocales.length > 1) {
+      const hasPublished = [...byLocale.values()].some((files) =>
+        files.some((item) => !item.draft),
+      );
+      if (!hasPublished) {
+        continue;
+      }
+
+      for (const locale of expectedLocales) {
+        const siblings = byLocale.get(locale) ?? [];
+        const hasPublishedSibling = siblings.some((item) => !item.draft);
+        if (!hasPublishedSibling) {
+          const present = [...byLocale.entries()]
+            .flatMap(([presentLocale, files]) =>
+              files.map((item) => `${presentLocale}:${item.file}`),
+            )
+            .join(", ");
+          warnings.push({
+            file: present,
+            message: `Translation key "${translationKey}" has no published post for locale "${locale}"`,
+          });
+        }
       }
     }
   }

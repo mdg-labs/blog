@@ -154,6 +154,10 @@ blog/
 | `blogMdxComponents` | Map for `<Content components={...} />` |
 | `sortPostsByDate`, `filterByLocale`, `filterPublished`, `paginate` | Collection helpers |
 | `resolvePostSlug(entry)` | `data.slug` or directory name from entry id |
+| `resolveTranslationKey(entry)` | Shared folder key after locale segment |
+| `buildTranslationIndex(posts)` | Map translation key → locale → slug |
+| `resolveBlogLocalePaths(entry, posts, options?)` | EN/DE public paths for switcher + hreflang |
+| `resolveBlogAlternateHref(entry, posts, options?)` | Target path for language toggle |
 | `formatPostDate(date, locale)` | Display formatting |
 | `buildRssFeed({ site, posts, locale? })` | RSS XML string |
 | `buildBlogPostingJsonLd(post, site)` | JSON-LD object |
@@ -186,12 +190,14 @@ blog/
 
 ```
 <contentBase>/
-  en/my-post/index.mdx      # roof / SlugBase
-  de/my-post/index.mdx
+  en/welcome/index.mdx      # slug: welcome
+  de/welcome/index.mdx      # slug: willkommen (folder name links translations)
   my-post/index.mdx         # PipeWatch (en only)
 ```
 
-Public URL: `/blog/my-post/`
+Shared folder name (after the locale segment) is the **translation key**. Per-locale `slug` in frontmatter may differ; `resolveBlogLocalePaths` maps switcher + hreflang URLs.
+
+Public URL: `/blog/<slug>/` (from frontmatter `slug`, or folder name when omitted).
 
 ---
 

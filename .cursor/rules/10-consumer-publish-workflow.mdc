@@ -1,0 +1,42 @@
+---
+description: Publish @mdg-labs/blog before bumping consumer semver — never wire consumers via file:
+alwaysApply: true
+---
+
+# Consumer integration — publish first, never `file:`
+
+`@mdg-labs/blog` is distributed via **GitHub Packages** (`npm.pkg.github.com`). Consumer sites (`website`, SlugBase marketing, PipeWatch marketing) must **not** point at a local path during normal task work.
+
+## Correct workflow
+
+1. **Implement** in `blog/packages/blog` on `blog` repo `staging`.
+2. **Bump version** in `packages/blog/package.json` (semver patch/minor as appropriate).
+3. **Run** `pnpm test` + `pnpm typecheck` in `packages/blog`.
+4. **Publish** — merge to `blog` `main` so `.github/workflows/publish.yml` publishes the new version to GitHub Packages (or operator publishes manually if that is the agreed process).
+5. **Only then** update the consumer `package.json` / lockfile:
+   ```json
+   "@mdg-labs/blog": "^0.1.4"
+   ```
+6. Run `npm install` / `pnpm install` in the consumer and verify build.
+
+## Forbidden
+
+```json
+// ❌ NEVER in consumer package.json during agent task work
+"@mdg-labs/blog": "file:../blog/packages/blog"
+"@mdg-labs/blog": "file:../../../blog/packages/blog"
+```
+
+`file:` is for **human local iteration only** when explicitly requested — not for commits, PRs, or agent-driven integration.
+
+## If consumer needs unpublished APIs
+
+- **Stop** — do not patch `node_modules` and do not add `file:`.
+- Finish and publish the blog package release first.
+- Report `blocked: consumer needs @mdg-labs/blog@X.Y.Z published` if publish is operator-only.
+
+## Version coupling
+
+- One blog release per API/export change consumers depend on.
+- Consumer lockfile bump is a **separate commit** in the consumer repo, after the package is on the registry.
+- Document new exports in `blog` README / `blog-system-plan.md` when adding public API.

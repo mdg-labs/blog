@@ -21,6 +21,16 @@ export {
 } from "./rss.js";
 export { resolvePostSlug, slugify, type PostSlugEntry } from "./slug.js";
 export {
+  buildTranslationIndex,
+  resolveBlogAlternateHref,
+  resolveBlogLocalePaths,
+  resolveTranslationKey,
+  type BlogLocalePaths,
+  type ResolveBlogLocalePathsOptions,
+  type TranslationEntry,
+  type TranslationIndex,
+} from "./translations.js";
+export {
   validateBlogContent,
   type ValidateBlogContentOptions,
   type ValidateBlogContentResult,
