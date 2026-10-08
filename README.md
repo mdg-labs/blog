@@ -266,7 +266,7 @@ CI runs on pull requests and pushes to `main` / `dev` (see [`.github/workflows/c
 
 ## Publishing
 
-Releases are automated on push to `main`. Bump `version` in [`packages/blog/package.json`](packages/blog/package.json) before merging.
+Work lands on `dev`; `main` moves only through a `dev` → `main` promotion PR, and a promotion that carries a new `version` in [`packages/blog/package.json`](packages/blog/package.json) publishes it.
 
 [`.github/workflows/publish.yml`](.github/workflows/publish.yml) then:
 
@@ -300,15 +300,13 @@ For architecture, phases, and acceptance criteria, see [`docs/blog-system-plan.m
 
 ---
 
-## Cursor artifacts for consumer repos
+## Agent rule for consumer repos
 
-Copyable agent guidance lives in [`dist/`](dist/README.md) — a **skill** (full integration manual) and **rule** (publish-first guardrails) for Astro marketing sites that consume this package.
+Consumer repos that use the Claude Code workflow carry a short rule with the publish-first and validation guardrails. Copy it from [`consumers/claude-rule.md`](consumers/claude-rule.md):
 
 ```bash
 # From a consumer repo root
-mkdir -p .cursor/skills/mdg-labs-blog-consumer .cursor/rules
-cp -r ../blog/dist/cursor/skill/mdg-labs-blog-consumer/* .cursor/skills/mdg-labs-blog-consumer/
-cp ../blog/dist/cursor/rule/mdg-labs-blog-consumer.mdc .cursor/rules/
+cp ../blog/consumers/claude-rule.md .claude/rules/mdg-labs-blog-consumer.md
 ```
 
-Agents working in **`mdg-labs/blog`** must keep `dist/` in sync when the public API, templates, or integration docs change — see [`.cursor/rules/20-sync-consumer-cursor-artifacts.mdc`](.cursor/rules/20-sync-consumer-cursor-artifacts.mdc).
+The full integration manual is the [Consumer integration manual](#consumer-integration-manual) above. When the public API, templates or integration steps change, update the README and `consumers/claude-rule.md` in the same commit.

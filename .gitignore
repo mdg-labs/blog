@@ -1,5 +1,2 @@
 node_modules/
 .turbo/
-
-# Local session memory (orchestrator sub-agents)
-.cursor/skills/agent-memory/**

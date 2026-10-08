@@ -1,0 +1,39 @@
+{
+  "$schema": "./workflow.schema.json",
+  "repo": "mdg-labs/blog",
+  "maintainer": "mdguggenbichler",
+  "tracker": { "type": "github" },
+  "branches": { "integration": "dev", "production": "main" },
+  "landing": "dev-cherry-pick",
+  "promotionBudget": null,
+  "gate": "pnpm test && pnpm typecheck",
+  "checks": [
+    {
+      "paths": ["packages/**", "package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml"],
+      "run": "pnpm test && pnpm typecheck",
+      "requires": ["node", "pnpm"]
+    },
+    {
+      "paths": [".github/workflows/**"],
+      "run": "actionlint",
+      "requires": ["actionlint"]
+    }
+  ],
+  "bootstrap": "pnpm install --frozen-lockfile",
+  "signoff": { "mode": "none" },
+  "threatModel": null,
+  "riskPaths": [
+    "packages/blog/package.json",
+    "packages/blog/src/index.ts",
+    "packages/blog/src/schema.ts",
+    "packages/blog/bin/**",
+    ".github/workflows/publish.yml"
+  ],
+  "labels": {
+    "areas": [
+      { "name": "area:package", "color": "7057ff", "description": "packages/blog — the published @mdg-labs/blog package" },
+      { "name": "area:consumer", "color": "c5def5", "description": "Consumer integration: README manual, templates, consumers/claude-rule.md" },
+      { "name": "area:ci", "color": "e99695", "description": "GitHub workflows and publishing" }
+    ]
+  }
+}
